@@ -1,0 +1,22 @@
+{
+    "version": 2,
+    "name": "portfolio-backend", 
+    "builds": [
+      { "src": "index.js", "use": "@now/node" }
+    ],
+    "routes": [
+      {
+        "src": "/api/createFeedback",
+        "dest": "/index.js" 
+      },
+      {
+        "src": "/api/readFeedbacks",
+        "dest": "/index.js" 
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/index.js" 
+      }
+    ]
+  }
+  
