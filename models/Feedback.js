@@ -25,5 +25,5 @@ const FeedbackSchema = new Schema ({
 });
 
 const Feedback = mongoose.model('feedback',FeedbackSchema);
-Feedback.createIndexes();
+// Feedback.createIndexes();
 module.exports = Feedback;
