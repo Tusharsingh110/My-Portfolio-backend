@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); // Import jwt if you plan to use it
+const { validEmail } = require("../validators/validator");
 
 const signup = async (req, res) => {
     try {
@@ -34,10 +35,14 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        if(!validEmail(email)) {
+            return res.status(400).json({statusCode:400, message:"Invalid Email format."})
+        }
+
         // Find user by email
         let user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ statusCode: 400, message: "Invalid email or password." });
+            return res.status(400).json({ statusCode: 400, message: "User does not Exist." });
         }
 
         // Check if password is correct
