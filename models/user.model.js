@@ -5,6 +5,11 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    isAdmin: {
+        type: String,
+        required: true,
+        default: "F"
+    },
     email: {
         type: String,
         required: true,

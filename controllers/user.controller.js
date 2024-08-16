@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); // Import jwt if you plan to use it
 const { validEmail } = require("../validators/validator");
+const { generateToken } = require("../utils/auth.utils");
 
 const signup = async (req, res) => {
     try {
@@ -52,7 +53,7 @@ const login = async (req, res) => {
         }
 
         // Generate a JWT token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+        const token = generateToken(user)
 
         res.status(200).json({statusCode:200, usermail: email, message: "Login successful", token });
     } catch (error) {
@@ -61,7 +62,21 @@ const login = async (req, res) => {
     }
 };
 
+const getUserDetails = async (req, res) => {
+    try {
+        const {id, isAdmin} = req.user;
+        const user = await User.findOne({_id:id});
+        if(!user) {
+            res.status(404).json({statusCode:404, message:"User not found"});
+        } 
+        res.status(200).json({statusCode:200, data: {name:user.username, mail:user.email, isAdmin:user.isAdmin}, message:"User details fetched successfully"})
+    } catch (error) {
+        console.error("Internal server error:", error);
+        res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
+    }
+}
 module.exports = {
     login,
-    signup
+    signup,
+    getUserDetails
 };
