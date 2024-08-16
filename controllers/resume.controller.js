@@ -31,7 +31,6 @@ const saveResume = async (req, res) => {
 const getAllResumeVersions = async (req, res) => {
     try {
         const allResumes = await Resume.find({}, { file: 0 })
-        console.log(allResumes);
         return res.status(200).json({ statusCode: 200, data: allResumes, message: "Resume Versions fetched successfully" })
     } catch (error) {
         return res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
