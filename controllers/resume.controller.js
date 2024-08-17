@@ -37,8 +37,22 @@ const getAllResumeVersions = async (req, res) => {
     }
 }
 
+const fetchResume = async (req, res) => {
+    try {
+        const {version} = req.params;
+        console.log(version);
+        const resume = await Resume.findOne({version});
+        if(!resume) {
+            return res.status(404).json({statusCode:404, message: "Resume not found"});
+        }
+        res.status(200).json({statusCode:200, data: resume, message:"Resume fetched succesfully"})
+    } catch (error) {
+        return res.status(500).json({ statusCode: 500, error:error,  message: "Internal Server Error" });
+    }
+}
+
 module.exports = {
     getAllResumeVersions,
-    // fetchResume,
+    fetchResume,
     saveResume
 }
