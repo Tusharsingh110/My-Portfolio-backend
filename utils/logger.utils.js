@@ -10,7 +10,7 @@ class Logger {
 
     createLogDirectory() {
         if (!fs.existsSync(this.logDirectory)) {
-            fs.mkdirSync(this.createLogDirectory, { recursive: true });
+            fs.mkdirSync(this.logDirectory, { recursive: true });
         }
     }
 
