@@ -4,7 +4,7 @@ const path = require('path')
 class Logger {
     constructor() {
         // check if the logs directory exists
-        this.logDirectory = path.join(__dirname, './logs');
+        this.logDirectory = '/tmp'
         this.createLogDirectory();
     }
 
