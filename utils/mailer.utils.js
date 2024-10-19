@@ -24,7 +24,7 @@ async function sendMail(mailObj = {}) {
         subject: subject,
         html: `
             <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-                <h2>Dear ${recipient.username},</h2>
+                <h2>Dear ${mailObj.username},</h2>
                 ${data}
                 <p>Best regards,</p>
                 <p>Tushar Singh</p>
@@ -81,7 +81,7 @@ async function sendOTPMail(mailObj, otp) {
         return { valid: true, message: 'OTP email sent successfully', response: info.response };
     } catch (error) {
         console.error('Error sending OTP mail:', error);
-        throw { valid: false, message: 'Error sending OTP mail', error };
+        return { valid: false, message: 'Error sending OTP mail', error };
     }
 }
 
