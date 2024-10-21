@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const feedbackRoutes = require('./routes/feedback.routes');
 const userRoutes = require('./routes/user.routes');
 const resumeRoutes = require('./routes/resume.routes');
+const skillRoutes = require('./routes/skill.routes');
 const loggerUtils = require('./utils/logger.utils');
 connectToMongo();
 
@@ -54,6 +55,8 @@ app.use((req, res, next) => {
 app.use('/feedbacks', feedbackRoutes);
 app.use('/user', userRoutes);
 app.use('/resume', resumeRoutes);
+app.use('/skill', skillRoutes);
+
 
 
 app.listen(port, () => {

@@ -52,10 +52,10 @@ async function sendFeedback(req, res) {
 
         res.status(200).json({ statusCode: 200, message: "Feedback sent successfully" })
     } catch (error) {
-        if (error.code === 11000) {
-            // duplicate key error
-            return res.status(400).json({ statusCode: 400, message: 'E-mail already exists!' })
-        }
+        // if (error.code === 11000) {
+        //     // duplicate key error
+        //     return res.status(400).json({ statusCode: 400, message: 'E-mail already exists!' })
+        // }
         res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
     }
 }
