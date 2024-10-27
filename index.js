@@ -58,7 +58,6 @@ app.use('/resume', resumeRoutes);
 app.use('/skill', skillRoutes);
 
 
-
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
