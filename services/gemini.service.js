@@ -7,7 +7,7 @@ const fetchImageLinkGemini = async (technology) => {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        const prompt = `just provide working images CDN linka for the ${technology} logo in SVG format. The response is to be an array of links: containing links in svg format seperated by commas. keep the response in raw format. do not add /n or other formatting just pure javascript array.take some time and try to find legitimate results, try to include https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ results if there are any. only provide the link if it is working SVG or PNG link`;
+        const prompt = `just provide working images CDN links for the ${technology} logo in SVG format. The response is to be an array of links: containing links in svg format seperated by commas. keep the response in raw format. do not add /n or other formatting just pure javascript array.take some time and try to find legitimate results, try to include https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ results if there are any. only provide the link if it is working SVG or PNG link`;
 
         const result = await model.generateContent(prompt);
         let geminiData = result.response.text();
@@ -27,6 +27,22 @@ const fetchImageLinkGemini = async (technology) => {
     }
 }
 
+// chat bot response
+const chatResponse = async (question) => {
+    try {
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const result = await model.generateContent(question);
+        return result.response.text();
+
+    } catch (error) {
+        console.error('Error fetching chat response:', error.response ? error.response.data : error.message);
+        return { valid:false, message:"Fetching chat response failed.", error:error.response ? error.response.data : error.message};
+    }
+}
+
 module.exports = {
-    fetchImageLinkGemini: fetchImageLinkGemini
+    fetchImageLinkGemini: fetchImageLinkGemini,
+    chatResponse: chatResponse
 }

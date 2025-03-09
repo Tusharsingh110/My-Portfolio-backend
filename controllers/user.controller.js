@@ -73,7 +73,7 @@ const getUserDetails = async (req, res) => {
         if (!user) {
             res.status(404).json({ statusCode: 404, message: "User not found" });
         }
-        res.status(200).json({ statusCode: 200, data: { username: user.username, mail: user.email, isAdmin: user.isAdmin, isVerified: user.isVerified }, message: "User details fetched successfully" })
+        res.status(200).json({ statusCode: 200, data: { id:user._id, username: user.username, mail: user.email, isAdmin: user.isAdmin, isVerified: user.isVerified }, message: "User details fetched successfully" })
     } catch (error) {
         console.error("Internal server error:", error);
         res.status(500).json({ statusCode: 500, message: "Internal Server Error" });

@@ -4,7 +4,7 @@ const path = require('path')
 class Logger {
     constructor() {
         // check if the logs directory exists
-        this.logDirectory = '/tmp'
+        this.logDirectory = './tmp'
         this.createLogDirectory();
     }
 
@@ -15,7 +15,7 @@ class Logger {
     }
 
     getLogFilePath() {
-        const date = new Date().toISOString().split('T')[0];
+        const date = (new Date().toISOString().split('T')[0]).replace('-','_');
         return path.join(this.logDirectory, `${date}.log`)
     }
 
