@@ -14,7 +14,8 @@ function initSocketServer(app) {
     const io = new Server(server, {
         cors: {
             origin: "*",
-        }
+        },
+        transports: ['polling'],  // 👈 Forces HTTP long polling instead of WebSockets
     });
 
     io.on('connection', (socket) => {
