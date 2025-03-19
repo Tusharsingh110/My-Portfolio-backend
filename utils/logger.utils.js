@@ -1,36 +1,37 @@
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
 
 class Logger {
     constructor() {
-        // check if the logs directory exists
-        this.logDirectory = './tmp'
-        this.createLogDirectory();
+        // In production (Vercel), we'll only use console logging
+        this.isProduction = process.env.NODE_ENV === 'production';
     }
 
-    createLogDirectory() {
-        if (!fs.existsSync(this.logDirectory)) {
-            fs.mkdirSync(this.logDirectory, { recursive: true });
-        }
-    }
-
-    getLogFilePath() {
-        const date = (new Date().toISOString().split('T')[0]).replace('-','_');
-        return path.join(this.logDirectory, `${date}.log`)
-    }
-
-    // Log request and response details
     logRequest(details) {
         const timestamp = new Date().toISOString();
-        const logMessage = `[${timestamp}] ${details.method} ${details.url} - Params: ${JSON.stringify(details.params)} - Body: ${JSON.stringify(details.body)} - Status: ${details.status} - ResponseTime: ${details.responseTime}ms\n`;
+        const logMessage = `[${timestamp}] ${details.method} ${details.url} - Params: ${JSON.stringify(details.params)} - Body: ${JSON.stringify(details.body)} - Status: ${details.status} - ResponseTime: ${details.responseTime}ms`;
 
-        const logFilePath = this.getLogFilePath(); 
+        // In production, just use console logging
+        if (this.isProduction) {
+            console.log(logMessage);
+            return;
+        }
 
-        fs.appendFile(logFilePath, logMessage, (err) => {
-            if (err) console.error('Failed to write log:', err);
-        });
+        // Local development logging to file
+        try {
+            const logDirectory = './tmp';
+            if (!fs.existsSync(logDirectory)) {
+                fs.mkdirSync(logDirectory, { recursive: true });
+            }
 
-        console.log(logMessage);
+            const logFile = path.join(logDirectory, `${new Date().toISOString().split('T')[0].replace(/-/g,'_')}.log`);
+            fs.appendFileSync(logFile, logMessage + '\n');
+            console.log(logMessage);
+        } catch (error) {
+            console.error('Logging failed:', error);
+            // Fallback to console
+            console.log(logMessage);
+        }
     }
 }
 
