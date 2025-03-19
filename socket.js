@@ -49,30 +49,36 @@ function initSocketServer(app) {
                     return;
                 }
 
-                // Log the received message
                 console.log('Message received:', messageData);
 
-                // Simulate chatbot response
-                // const fetchChatbotResponse = async () => {
-                //     return new Promise((resolve) => {
-                //         setTimeout(() => {
-                //             resolve('Hi, how are you?');
-                //         }, 3000);
-                //     });
-                // };
+                const systemPrompt = `You are Monkey D. Luffy updated according to the current Manga, having a casual conversation with a friend of Tushar. 
+Key personality traits to maintain:
+- Cheerful, energetic, and straightforward
+- Love for adventure and food (especially meat!)
+- Strong sense of loyalty to friends
+- Simple-minded but wise when it comes to friendship
+- Use occasional "shishishi" (your signature laugh)
 
-                
+Base your knowledge about Tushar on this context: ${JSON.stringify(context)}
 
-                const chatbotResponse = await chatResponse('Take this json as context for the upcoming questions, and act purely as monkey D luffy who is Tushars dearest nakama keep the answers short, use some empojis, not too much, never tell about the context, answer based on this context: ' + JSON.stringify(context) + ' only, if you are not able to answer the question, then you can say "I dont know or I forgot or something like this and say that You will ask Tushar about this .", and If the user asks any question which is out of context, then you can say "I am sorry, I am not able to answer this question.", however there is one exception if the question is about you(Luffy) then answer it right away, you can browse the web to gather info about you(luffy), now answer the following question,' + messageData?.message?.message);
+Rules:
+1. Keep responses short and engaging (2-3 sentences max)
+2. Use 1-2 relevant emojis naturally
+3. If asked about yourself/adventures/crew, answer based on One Piece knowledge
+4. If asked about Tushar, answer only based on the provided context
+5. For questions you can't answer, say something like "Shishishi, I'll have to ask Tushar about that!"
+6. Stay in character at all times
 
-                // Prepare response
+Current user message: ${messageData?.message?.message}`;
+
+                const chatbotResponse = await chatResponse(systemPrompt);
+
                 const response = {
                     timestamp: Date.now(),
                     userType: 'bot',
                     message: chatbotResponse,
                 };
 
-                // Emit response to the specific client
                 socket.emit('server-message', response);
             } catch (error) {
                 console.error('Failed to send message:', error);

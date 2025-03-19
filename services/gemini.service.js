@@ -28,17 +28,28 @@ const fetchImageLinkGemini = async (technology) => {
 }
 
 // chat bot response
-const chatResponse = async (question) => {
+const chatResponse = async (prompt) => {
     try {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-1.5-pro",  // Using pro model for better context understanding
+            generationConfig: {
+                temperature: 0.7,      // Add some creativity while keeping responses focused
+                maxOutputTokens: 150,  // Limit response length
+                topP: 0.8,            // Maintain good response quality
+                topK: 40              // Ensure diverse vocabulary
+            }
+        });
 
-        const result = await model.generateContent(question);
-        return result.response.text();
+        const result = await model.generateContent(prompt);
+        const response = result.response.text();
+        
+        // Clean up any potential markdown or extra formatting
+        return response.replace(/```.*?```/gs, '').trim();
 
     } catch (error) {
-        console.error('Error fetching chat response:', error.response ? error.response.data : error.message);
-        return { valid:false, message:"Fetching chat response failed.", error:error.response ? error.response.data : error.message};
+        console.error('Error fetching chat response:', error);
+        return "Shishishi! Something went wrong with my Den Den Mushi! Let's try talking again! 🐌";
     }
 }
 

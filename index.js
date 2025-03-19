@@ -16,7 +16,6 @@ connectToMongo();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const SOCKET_PORT = process.env.SOCKET_PORT || 4000;
 
 // Middleware setup
 app.use(cors());
@@ -66,30 +65,22 @@ app.use((err, req, res, next) => {
   res.status(500).send({ error: 'Something went wrong. Please try again.' });
 });
 
-// Initialize socket server
+// Initialize socket server and get HTTP server
 const server = initSocketServer(app);
 
-// Start HTTP server
-const httpServer = app.listen(port, () => {
-  console.log(`HTTP server running at http://localhost:${port}`);
+// Start server on single port
+server.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });
 
-// Start Socket server
-server.listen(SOCKET_PORT, () => {
-  console.log(`Socket server running on http://localhost:${SOCKET_PORT}`);
-});
-
-// Graceful shutdown
+// Modify graceful shutdown
 ['SIGINT', 'SIGTERM'].forEach(signal => {
   process.on(signal, () => {
     console.log('Shutting down gracefully...');
     server.close(() => {
-      console.log('Socket server closed');
+      console.log('Server closed');
+      process.exit(0);
     });
-    httpServer.close(() => {
-      console.log('HTTP server closed');
-    });
-    process.exit(0);
   });
 });
 
