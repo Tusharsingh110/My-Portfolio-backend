@@ -58,6 +58,9 @@ app.use('/feedbacks', feedbackRoutes);
 app.use('/user', userRoutes);
 app.use('/resume', resumeRoutes);
 app.use('/skill', skillRoutes);
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'healthy' });
+});
 
 // Global error-handling middleware
 app.use((err, req, res, next) => {
