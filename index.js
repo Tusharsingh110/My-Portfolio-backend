@@ -15,7 +15,7 @@ const skillRoutes = require('./routes/skill.routes');
 connectToMongo();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 9000;
 
 // Middleware setup
 app.use(cors());
