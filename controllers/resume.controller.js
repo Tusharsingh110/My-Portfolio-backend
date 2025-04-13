@@ -2,9 +2,10 @@ const Resume = require("../models/resume.model");
 
 const saveResume = async (req, res) => {
     try {
-        const { version, description } = req.body;
+        const { version, mimeType, description } = req.body;
         const file = req.file;
-        if (!file || !description || !version) {
+
+        if (!file || !description || !version || !mimeType) {
             return res.status(400).json({ statusCode: 400, message: `Incomplete Data` });
         }
         let versionMatch = await Resume.findOne({ version });
@@ -15,6 +16,7 @@ const saveResume = async (req, res) => {
         const newResume = new Resume({
             version,
             file: base64File,
+            mimeType,
             description
         });
 

@@ -21,6 +21,10 @@ const ResumeSchema = new Schema({
     description: {
         type: String,
         required: true
+    },
+    mimeType: {
+        type : String,
+        required: true
     }
 }, {
     timestamps: true // Automatically manage createdAt and updatedAt
