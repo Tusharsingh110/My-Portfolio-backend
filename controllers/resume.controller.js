@@ -32,7 +32,7 @@ const saveResume = async (req, res) => {
 
 const getAllResumeVersions = async (req, res) => {
     try {
-        const allResumes = await Resume.find({}, { file: 0 })
+        const allResumes = await Resume.find({"mimeType":"application/pdf"}, { file: 0 })
         return res.status(200).json({ statusCode: 200, data: allResumes, message: "Resume Versions fetched successfully" })
     } catch (error) {
         return res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
@@ -53,8 +53,21 @@ const fetchResume = async (req, res) => {
     }
 }
 
+const fetchResumeJSON = async (req, res) => {
+    try {
+        let resume = await Resume.findOne({"mimeType":"application/json"});
+        if(!resume) {
+            return res.status(404).json({statusCode:404, message: "Resume data not found"});
+        }
+        res.status(200).json({statusCode:200, data: resume, message:"Resume data fetched succesfully"})
+    } catch (error) {
+        return res.status(500).json({ statusCode: 500, error:error,  message: "Internal Server Error" });
+    }
+}
+
 module.exports = {
     getAllResumeVersions,
     fetchResume,
-    saveResume
+    saveResume,
+    fetchResumeJSON
 }
